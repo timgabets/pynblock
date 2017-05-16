@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pynblock',
-      version='0.1',
+      version='0.11',
       
       description='A payment card industry crypto library - PIN blocks, card/PIN verification values calculation etc.',
       long_description=open('README').read(),
@@ -28,6 +28,6 @@ setup(name='pynblock',
       author_email='tim@gabets.ru',
       
       license='LGPLv2',
-      packages=['pycrypto'],
-      install_requires=[],
+      packages=['pynblock'],
+      install_requires=['pycrypto'],
       zip_safe=True)
