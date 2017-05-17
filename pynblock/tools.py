@@ -85,3 +85,22 @@ def get_digits_from_string(cyphertext, length=4):
                 digits += str(int(c, 16) - 10)
     
     return digits
+
+
+def get_visa_pvv(account_number, key_index, pin, PVK):
+    """
+    The algorithm generates a 4-digit PIN verification value (PVV) based on the transformed security parameter (TSP).
+    
+    For VISA PVV algorithms, the leftmost 11 digits of the TSP are the personal account number (PAN), 
+    the leftmost 12th digit is a key table index to select the PVV generation key, and the rightmost 
+    4 digits are the PIN. The key table index should have a value between 1 and 6, inclusive.
+    """
+    tsp = account_number[-12:-1] + key_index + pin
+    if len(PVK) != 32:
+        raise ValueError('Incorrect key length')
+
+    left_key_cypher = DES3.new(PVK[:16], DES3.MODE_ECB)
+    right_key_cypher = DES3.new(PVK[16:], DES3.MODE_ECB)
+
+    encrypted_tsp = left_key_cypher.encrypt(right_key_cypher.decrypt((left_key_cypher.encrypt(B2raw(tsp)))))
+    return bytes(get_digits_from_string(raw2str(encrypted_tsp)), 'utf-8')

@@ -2,7 +2,7 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string
+from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv
 
 class TestPynblock(unittest.TestCase):
     def test_raw2str(self):
@@ -46,6 +46,16 @@ class TestPynblock(unittest.TestCase):
 
     def test_get_digits_from_string_letters_only_3(self):
         self.assertEqual(get_digits_from_string('EFADCFFFBDADECABFBB', 3), '450')
+
+    """
+    get_visa_pvv()
+    """
+    def test_get_visa_pvv(self):
+        self.assertEqual(get_visa_pvv(b'4761260000000134', b'1', b'1234', b'DEADDEADDEADDEADBEAFBEAFBEAFBEAF'), b'8289')
+
+    def test_get_visa_pvv_incorrect_key(self):
+        with self.assertRaisesRegex(ValueError, 'Incorrect key length'):
+            get_visa_pvv(b'4761260000000134', b'1', b'1234', b'DEADDEADDEADDEADBEAFBEAFBEAF')
 
 if __name__ == '__main__':
     unittest.main()

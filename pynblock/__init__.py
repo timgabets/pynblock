@@ -1,1 +1,1 @@
-__all__ = ['raw2str', 'raw2B', 'B2raw', 'xor', 'key_CV', 'get_digits_from_string']
+__all__ = ['raw2str', 'raw2B', 'B2raw', 'xor', 'key_CV', 'get_digits_from_string', 'get_visa_pvv']
