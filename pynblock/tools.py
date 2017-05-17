@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from binascii import hexlify, unhexlify
+from Crypto.Cipher import DES, DES3
+
 
 def raw2str(raw_data):
     """
@@ -30,3 +32,13 @@ def xor(block1, block2):
     """
     xored = ''.join(['{0:#0{1}x}'.format((i ^ j), 4)[2:] for i, j in zip(B2raw(block1), B2raw(block2))])
     return bytes(xored.upper(), 'utf-8')
+
+
+def key_CV(key, kcv_length=6):
+    """
+    Get DES key check value. The key is binary hex e.g. b'DF1267EEDCBA9876'
+    """
+    cipher = DES3.new(B2raw(key), DES3.MODE_ECB)
+    encrypted = raw2B(cipher.encrypt(B2raw(b'00000000000000000000000000000000')))
+
+    return encrypted[:kcv_length]

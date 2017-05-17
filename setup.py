@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(name='pynblock',
-      version='0.12',
+      version='0.13',
       
-      description='A payment card industry crypto library - PIN blocks, card/PIN verification values calculation etc.',
+      description='Payment card industry crypto library - PIN blocks, card/PIN verification values calculation etc.',
       long_description=open('README').read(),
       
       classifiers=[
