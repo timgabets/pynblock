@@ -104,3 +104,19 @@ def get_visa_pvv(account_number, key_index, pin, PVK):
 
     encrypted_tsp = left_key_cypher.encrypt(right_key_cypher.decrypt((left_key_cypher.encrypt(B2raw(tsp)))))
     return bytes(get_digits_from_string(raw2str(encrypted_tsp)), 'utf-8')
+
+
+def get_visa_cvv(account_number, exp_date, service_code, CVK):
+    """
+    """
+    if len(CVK) != 32:
+        raise ValueError('Incorrect key length')
+        
+    tsp = exp_date + service_code + b'000000000'
+    des_cipher = DES.new(B2raw(CVK[:16]))
+    des3_cipher = DES3.new(B2raw(CVK), DES3.MODE_ECB)
+        
+    block1 = xor(raw2B(des_cipher.encrypt(B2raw(account_number))), tsp)
+    block2 = des3_cipher.encrypt(B2raw(block1))
+
+    return get_digits_from_string(raw2str(block2), 3)
