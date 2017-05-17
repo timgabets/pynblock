@@ -2,7 +2,7 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV
+from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string
 
 class TestPynblock(unittest.TestCase):
     def test_raw2str(self):
@@ -17,6 +17,9 @@ class TestPynblock(unittest.TestCase):
     def test_xor(self):
         self.assertEqual(xor(b'0916101000000000', b'C19F07316463054E'), b'C88917216463054E')
 
+    """
+    key_CV()
+    """
     def test_key_CV_default_kcv_length(self):
         self.assertEqual(key_CV(b'E6F1081FEA4C402CC192B65DE367EC3E'), b'212CF9')
 
@@ -28,6 +31,21 @@ class TestPynblock(unittest.TestCase):
 
     def test_key_CV_16(self):
         self.assertEqual(key_CV(b'E6F1081FEA4C402CC192B65DE367EC3E', 16), b'212CF9158251CDD3')
+
+    """
+    get_digits_from_string()
+    """
+    def test_get_digits_from_string(self):
+        self.assertEqual(get_digits_from_string('59EF34AD722C0556F7F6FBD4A76D38E6', 4), '5934')
+
+    def test_get_pvv_digits_from_mixed_string(self):
+        self.assertEqual(get_digits_from_string('EEFADCFFFBD7ADECAB9FBB', 4), '7944')
+
+    def test_get_digits_from_string_letters_only(self):
+        self.assertEqual(get_digits_from_string('EFADCFFFBDADECABFBB', 4), '4503')
+
+    def test_get_digits_from_string_letters_only_3(self):
+        self.assertEqual(get_digits_from_string('EFADCFFFBDADECABFBB', 3), '450')
 
 if __name__ == '__main__':
     unittest.main()

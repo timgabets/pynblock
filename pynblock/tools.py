@@ -42,3 +42,46 @@ def key_CV(key, kcv_length=6):
     encrypted = raw2B(cipher.encrypt(B2raw(b'00000000000000000000000000000000')))
 
     return encrypted[:kcv_length]
+
+
+def get_digits_from_string(cyphertext, length=4):
+    """
+    Extract PVV/CVV digits from the cyphertext (HEX-encoded string, e.g. 'EEFADCFFFBD7ADECAB9FBB')
+    """
+    digits = ''
+   
+    """
+    The algorigthm is used for PVV and CVV calculation.
+
+    1. The cyphertext is scanned from left to right. Decimal digits are
+    selected during the scan until the needed number of decimal digits is found. 
+    Each selected digit is placed from left to right according to the order
+    of selection. If needed number of decimal digits is found (four in case of PVV, 
+    three in case of CVV), those digits are the PVV or CVV.
+    """
+    for c in cyphertext:
+        if len(digits) >= length:
+            break
+        try:
+            int(c)
+            digits += c
+        except ValueError:
+            continue
+    
+    """
+    2. If, at the end of the first scan, less than four decimal digits
+    have been selected, a second scan is performed from left to right.
+    During the second scan, all decimal digits are skipped and only nondecimal
+    digits can be processed. Nondecimal digits are converted to decimal
+    digits by subtracting 10. The process proceeds until four digits of
+    PVV are found.
+    """
+    if len(digits) < length:
+        for c in cyphertext:
+            if len(digits) >= length:
+                break
+    
+            if (int(c, 16) - 10) >= 0:
+                digits += str(int(c, 16) - 10)
+    
+    return digits
