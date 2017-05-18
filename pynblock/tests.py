@@ -2,7 +2,7 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv
+from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin
 
 class TestPynblock(unittest.TestCase):
     def test_raw2str(self):
@@ -62,6 +62,24 @@ class TestPynblock(unittest.TestCase):
     """
     def test_get_visa_cvv(self):
         self.assertEqual(get_visa_cvv(b'4433678298261175', b'0916', b'101', b'4C37C8319D76ADAB58D9431543C2165B'), '478')
+
+    """
+    get_clear_pin()
+    """
+    def test_get_clear_pin_1234(self):
+        self.assertEqual(get_clear_pin(b'0412BCEEDCBA9876', b'881123456789'), b'1234')
+
+    def test_get_clear_pin_non_numeric(self):
+        with self.assertRaisesRegex(ValueError, 'PIN contains non-numeric characters'):
+            get_clear_pin(b'041267EEDCBA9876', b'881123456789')
+
+    def test_get_clear_pin_pin_length_9(self):
+        with self.assertRaisesRegex(ValueError, 'Incorrect PIN length: 9'):
+            get_clear_pin(b'091267EEDCBA9876', b'881123456789')
+
+    def test_get_clear_pin_improper_length(self):
+        with self.assertRaisesRegex(ValueError, 'Incorrect PIN length: 223'):
+            get_clear_pin(b'DF1267EEDCBA9876', b'881123456789')
 
 if __name__ == '__main__':
     unittest.main()

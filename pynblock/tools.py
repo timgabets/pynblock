@@ -120,3 +120,24 @@ def get_visa_cvv(account_number, exp_date, service_code, CVK):
     block2 = des3_cipher.encrypt(B2raw(block1))
 
     return get_digits_from_string(raw2str(block2), 3)
+
+
+def get_clear_pin(pinblock, account_number):
+    """
+    Calculate the clear PIN from provided PIN block and account_number, which is the 12 right-most digits of card account number, excluding check digit
+    """
+    raw_pinblock = bytes.fromhex(pinblock.decode('utf-8'))
+    raw_acct_num = bytes.fromhex((b'0000' + account_number).decode('utf-8'))
+        
+    pin_str = xor(raw2B(raw_pinblock), raw2B(raw_acct_num)).decode('utf-8')
+    pin_length = int(pin_str[:2], 16)
+    
+    if pin_length >= 4 and pin_length < 9:
+        pin = pin_str[2:2+pin_length]            
+        try:
+            int(pin)
+        except ValueError:
+            raise ValueError('PIN contains non-numeric characters')
+        return bytes(pin, 'utf-8')
+    else:
+        raise ValueError('Incorrect PIN length: {}'.format(pin_length))
