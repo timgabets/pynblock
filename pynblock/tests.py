@@ -131,13 +131,13 @@ class TestPynblock(unittest.TestCase):
         self.assertEqual(check_key_parity(b''), True)
 
     def test_check_key_parity_xE7(self):
-        self.assertEqual(check_key_parity(b'E7'), True)
+        self.assertEqual(check_key_parity(b'\xE7'), True)
 
     def test_check_key_parity_all_bytes_OK(self):
-        self.assertEqual(check_key_parity(b'E7A3B1'), True)
+        self.assertEqual(check_key_parity(b'\xE7\xA3\xB1'), True)
 
     def test_check_key_parity_one_byte_failed_parity_check(self):
-        self.assertEqual(check_key_parity(b'E7A3C8B1'), False)
+        self.assertEqual(check_key_parity(b'\xE7\xA3\xC8\xB1'), False)
 
     """
     modify_key_parity()

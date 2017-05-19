@@ -185,7 +185,7 @@ def check_key_parity(key):
     Returns False if the key fails the parity check
     Returns True if the key is fine
     """
-    for byte in B2raw(key):
+    for byte in key:
         if parityOf(int(byte)) == -1:
             return False
     return True
