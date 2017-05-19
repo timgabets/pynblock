@@ -165,3 +165,28 @@ def get_pinblock(__PIN, __PAN):
 
     result = ''.join(["{0:#0{1}x}".format((i ^ j), 4)[2:] for i, j in zip(raw_message, raw_key)])
     return result
+
+
+def parityOf(int_type):
+    """
+    Calculates the parity of an integer, returning 0 if there are an even number of set bits, and -1 if there are an odd number. 
+    """
+    parity = 0
+    while (int_type):
+        parity = ~parity
+        int_type = int_type & (int_type - 1)
+    return(parity)
+
+
+def check_key_parity(key):
+    """
+    Perform the parity check for a given key.
+
+    Returns False if the key fails the parity check
+    Returns True if the key is fine
+    """
+
+    for byte in B2raw(key):
+        if parityOf(int(byte)) == -1:
+            return False
+    return True
