@@ -2,7 +2,7 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock, parityOf, check_key_parity
+from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock, parityOf, check_key_parity, modify_key_parity
 
 class TestPynblock(unittest.TestCase):
     def test_raw2str(self):
@@ -138,6 +138,27 @@ class TestPynblock(unittest.TestCase):
 
     def test_check_key_parity_one_byte_failed_parity_check(self):
         self.assertEqual(check_key_parity(b'E7A3C8B1'), False)
+
+    """
+    modify_key_parity()
+    """
+    def test_modify_key_parity_empty_key(self):
+        self.assertEqual(modify_key_parity(b''), b'')
+
+    def test_modify_key_parity_e6_to_e7(self):
+        self.assertEqual(modify_key_parity(b'\xe6'), b'\xe7')
+
+    def test_modify_key_parity_ff_unmodified(self):
+        self.assertEqual(modify_key_parity(b'\xff'), b'\xff')
+
+    def test_modify_key_parity_fe_to_ff(self):
+        self.assertEqual(modify_key_parity(b'\xfe'), b'\xff')
+
+    def test_modify_key_parity_3_byte_key_unmodified(self):
+        self.assertEqual(modify_key_parity(b'\xe7\xa3\xb1'), b'\xe7\xa3\xb1')
+
+    def test_modify_key_parity_4_byte_key_fixed(self):
+        self.assertEqual(modify_key_parity(b'\xe7\xa3\xc8\xb1'), b'\xe7\xa3\xc9\xb1')
 
 if __name__ == '__main__':
     unittest.main()

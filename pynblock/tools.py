@@ -185,8 +185,28 @@ def check_key_parity(key):
     Returns False if the key fails the parity check
     Returns True if the key is fine
     """
-
     for byte in B2raw(key):
         if parityOf(int(byte)) == -1:
             return False
     return True
+
+
+def modify_key_parity(key):
+    """
+    The prior use of the function is to return the parity-validated key.
+
+    The incoming key is expected to be hex data binary representation, e.g. b'E7A3C8B1'
+    """
+    validated_key = b''
+    for byte in key:
+        if parityOf(int(byte)) == -1:
+            byte_candidate = int(byte) + 1 
+            while parityOf(byte_candidate) == -1:
+                byte_candidate = divmod(byte_candidate + 1, 256)[1]
+            validated_key += bytes([byte_candidate])
+
+        else:
+            validated_key += bytes([byte])
+    return validated_key
+
+
