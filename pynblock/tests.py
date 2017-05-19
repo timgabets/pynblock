@@ -139,6 +139,9 @@ class TestPynblock(unittest.TestCase):
     def test_check_key_parity_one_byte_failed_parity_check(self):
         self.assertEqual(check_key_parity(b'\xE7\xA3\xC8\xB1'), False)
 
+    def test_check_key_parity_default_TPK(self):
+        self.assertEqual(check_key_parity(bytes.fromhex('FA9F90D49CB27B7D14A3FA9CCCFF6CB7')), True)
+
     """
     modify_key_parity()
     """
@@ -159,6 +162,9 @@ class TestPynblock(unittest.TestCase):
 
     def test_modify_key_parity_4_byte_key_fixed(self):
         self.assertEqual(modify_key_parity(b'\xe7\xa3\xc8\xb1'), b'\xe7\xa3\xc9\xb1')
+
+    def test_modify_key_parity_default_TPK(self):
+        self.assertEqual(modify_key_parity(bytes.fromhex('32743CD2823EF937A865A18A8A3A1657')), B2raw(b'33743CD2823FF939A965A38B8B3A1759'))
 
 if __name__ == '__main__':
     unittest.main()
