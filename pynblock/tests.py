@@ -2,7 +2,7 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin
+from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock
 
 class TestPynblock(unittest.TestCase):
     def test_raw2str(self):
@@ -80,6 +80,27 @@ class TestPynblock(unittest.TestCase):
     def test_get_clear_pin_improper_length(self):
         with self.assertRaisesRegex(ValueError, 'Incorrect PIN length: 223'):
             get_clear_pin(b'DF1267EEDCBA9876', b'881123456789')
+
+    """
+    get_pinblock()
+    """
+    def test_get_pinblock_empty_pin(self):
+        self.assertEqual(get_pinblock('', '4000001234562000'), None)
+
+    def test_get_pinblock_empty_pan(self):
+        self.assertEqual(get_pinblock('1234', ''), None)
+
+    def test_get_pinblock_pin_passed_as_int(self):
+        self.assertEqual(get_pinblock(1234, '4000001234562000'), '041234fedcba9dff')
+
+    def test_get_pinblock_cardnumber_passed_as_int(self):
+        self.assertEqual(get_pinblock('1234', 4000001234562000), '041234fedcba9dff')    
+
+    def test_get_pinblock_length_4(self):
+        self.assertEqual(get_pinblock('1234', '8998811234567890'), '0412bceedcba9876')
+
+    def test_get_pinblock_length_5(self):
+        self.assertEqual(get_pinblock('92389', '4000001234562'), '0592789fffedcba9')
 
 if __name__ == '__main__':
     unittest.main()

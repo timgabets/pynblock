@@ -141,3 +141,27 @@ def get_clear_pin(pinblock, account_number):
         return bytes(pin, 'utf-8')
     else:
         raise ValueError('Incorrect PIN length: {}'.format(pin_length))
+
+
+def get_pinblock(__PIN, __PAN):
+    """
+    """
+    PIN = str(__PIN)
+    PAN = str(__PAN)
+
+    if not PIN or not PAN:
+        return None
+
+    block1 = '0' + str(len(PIN)) + str(PIN)
+    while len(block1) < 16:
+        block1 += 'F'
+    block2 = '0000' + PAN[-13:-1]
+
+    try:
+        raw_message = bytes.fromhex(block1)
+        raw_key = bytes.fromhex(block2)
+    except ValueError:
+        return ''
+
+    result = ''.join(["{0:#0{1}x}".format((i ^ j), 4)[2:] for i, j in zip(raw_message, raw_key)])
+    return result
