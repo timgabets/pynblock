@@ -1,10 +1,10 @@
 from setuptools import setup
 
 setup(name='pynblock',
-      version='0.22',
+      version='0.23',
       
       description='Payment card industry crypto library - PIN blocks, card/PIN verification values calculation etc.',
-      long_description=open('README').read(),
+      long_description=open('README.rst').read(),
       
       classifiers=[
         'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
