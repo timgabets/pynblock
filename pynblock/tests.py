@@ -2,18 +2,37 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock, parityOf, check_key_parity, modify_key_parity, hexify
+from pynblock.tools import str2bytes, raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock, parityOf, check_key_parity, modify_key_parity, hexify
 
 class TestPynblock(unittest.TestCase):
+
+    """
+    str2bytes()
+    """
+    def test_str2bytes(self):
+        self.assertEqual(str2bytes('DF1267EEDCBA9876'), b'DF1267EEDCBA9876') 
+
+    """
+    raw2str()
+    """
     def test_raw2str(self):
         self.assertEqual(raw2str(b'\xdf\x12g\xee\xdc\xba\x98v'), 'DF1267EEDCBA9876')
 
+    """
+    raw2B()
+    """
     def test_raw2B(self):
         self.assertEqual(raw2B(b'\xdf\x12g\xee\xdc\xba\x98v'), b'DF1267EEDCBA9876')
 
+    """
+    B2raw()
+    """
     def test_B2raw(self):
         self.assertEqual(B2raw(b'DF1267EEDCBA9876'), b'\xdf\x12g\xee\xdc\xba\x98v')
 
+    """
+    xor()
+    """
     def test_xor(self):
         self.assertEqual(xor(b'0916101000000000', b'C19F07316463054E'), b'C88917216463054E')
 
