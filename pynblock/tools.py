@@ -8,10 +8,7 @@ from Crypto.Cipher import DES, DES3
 def str2bytes(data):
     """
     """
-    if sys.version_info[0] == 3:
-        return bytes(data, 'utf-8')
-    else:
-        return bytes(data)
+    return bytes(data, 'utf-8')
 
 
 def raw2str(raw_data):
