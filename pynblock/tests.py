@@ -2,7 +2,7 @@
 
 import unittest
 
-from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock, parityOf, check_key_parity, modify_key_parity
+from pynblock.tools import raw2str,raw2B, B2raw, xor, key_CV, get_digits_from_string, get_visa_pvv, get_visa_cvv, get_clear_pin, get_pinblock, parityOf, check_key_parity, modify_key_parity, hexify
 
 class TestPynblock(unittest.TestCase):
     def test_raw2str(self):
@@ -16,6 +16,26 @@ class TestPynblock(unittest.TestCase):
 
     def test_xor(self):
         self.assertEqual(xor(b'0916101000000000', b'C19F07316463054E'), b'C88917216463054E')
+
+    """
+    hexify()
+    """
+    def test_hexify_zero(self):
+        self.assertEqual(hexify(0), '00')
+
+    def test_hexify_12(self):
+        self.assertEqual(hexify(12), '0C')
+
+    def test_hexify_256(self):
+        self.assertEqual(hexify(256), '0100')
+
+    def test_hexify_negative(self):
+        with self.assertRaisesRegex(ValueError, 'Invalid number to hexify - must be positive'):
+            hexify(-700)
+
+    def test_hexify_float(self):
+        with self.assertRaises(TypeError):
+            hexify(33.88)
 
     """
     key_CV()

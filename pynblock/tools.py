@@ -44,6 +44,23 @@ def xor(block1, block2):
     return bytes(xored.upper(), 'utf-8')
 
 
+def hexify(number):
+    """
+    Convert integer to hex string representation, e.g. 12 to '0C'
+    """
+    if( isinstance(number, int) == False ):
+        raise TypeError('hexify(): expected integer, not {}'.format(type(number)))
+
+    if number < 0:
+        raise ValueError('Invalid number to hexify - must be positive')
+
+    result = hex(int(number)).replace('0x', '').upper()
+    if divmod(len(result), 2)[1] == 1:
+        # Padding
+        result = '0{}'.format(result)
+    return result
+
+
 def key_CV(key, kcv_length=6):
     """
     Get DES key check value. The key is binary hex e.g. b'DF1267EEDCBA9876'

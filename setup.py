@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pynblock',
-      version='0.24',
+      version='0.25',
       
       description='Payment card industry crypto library - PIN blocks, card/PIN verification values calculation etc.',
       long_description=open('README.rst').read(),
