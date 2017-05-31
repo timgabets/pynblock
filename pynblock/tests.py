@@ -102,6 +102,10 @@ class TestPynblock(unittest.TestCase):
     def test_get_visa_cvv(self):
         self.assertEqual(get_visa_cvv(b'4433678298261175', b'0916', b'101', b'4C37C8319D76ADAB58D9431543C2165B'), '478')
 
+    def test_get_visa_cvv_wrong_key(self):
+        with self.assertRaisesRegex(ValueError, 'Incorrect key length'):
+            get_visa_cvv(b'4433678298261175', b'0916', b'101', b'')
+
     """
     get_clear_pin()
     """
@@ -141,6 +145,8 @@ class TestPynblock(unittest.TestCase):
     def test_get_pinblock_length_5(self):
         self.assertEqual(get_pinblock('92389', '4000001234562'), '0592789fffedcba9')
 
+    def test_get_pinblock_invalid_data(self):
+        self.assertEqual(get_pinblock('IDDQD', 'BBPE'), '')
 
     """
     parityOf()
